@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Deploys a studio domain with 5 users and a jupyter server and kernel gateway app for each user
+Description: Deploys a studio domain with 1 user profile and a jupyter server and kernel gateway app
 Parameters:
   KernelImageArn:
     Type: String
-    Default: 'arn:aws:sagemaker:us-east-1:081325390199:image/datascience-1.0'
+    Default: 'arn:aws:sagemaker:eu-west-1:470317259841:image/datascience-1.0'
   InstanceType:
     Type: String
     AllowedValues: ['ml.t3.medium', 'ml.m5.large', 'ml.c5.large', 'ml.g4dn.xlarge']
@@ -84,6 +84,7 @@ Resources:
               Action:
                 - sts:AssumeRole
         Path: /service-role/
+        RoleName: AmazonSageMaker-ExecutionRole-12345
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/AmazonSageMakerFullAccess
           - arn:aws:iam::aws:policy/AmazonS3FullAccess
@@ -160,82 +161,6 @@ Resources:
         InstanceType: !Ref InstanceType
         SageMakerImageArn: !Ref KernelImageArn
       UserProfileName: !Select [0, !Split ["|", !Ref StudioUser1]]
-
-  JupyterServer2:
-    Type: AWS::SageMaker::App
-    Properties: 
-      AppName: "default"
-      AppType: "JupyterServer"
-      DomainId: !Ref SageMakerDomain
-      UserProfileName: !Select [0, !Split ["|", !Ref StudioUser2]]
-
-  KernelGateway2:
-    Type: AWS::SageMaker::App
-    Properties: 
-      AppName: "user-2-kernel"
-      AppType: "KernelGateway"
-      DomainId: !Ref SageMakerDomain
-      ResourceSpec:
-        InstanceType: !Ref InstanceType
-        SageMakerImageArn: !Ref KernelImageArn
-      UserProfileName: !Select [0, !Split ["|", !Ref StudioUser2]]
-
-  JupyterServer3:
-    Type: AWS::SageMaker::App
-    Properties: 
-      AppName: "default"
-      AppType: "JupyterServer"
-      DomainId: !Ref SageMakerDomain
-      UserProfileName: !Select [0, !Split ["|", !Ref StudioUser3]]
-
-  KernelGateway3:
-    Type: AWS::SageMaker::App
-    Properties: 
-      AppName: "user-3-kernel"
-      AppType: "KernelGateway"
-      DomainId: !Ref SageMakerDomain
-      ResourceSpec:
-        InstanceType: !Ref InstanceType
-        SageMakerImageArn: !Ref KernelImageArn
-      UserProfileName: !Select [0, !Split ["|", !Ref StudioUser3]]
-
-  JupyterServer4:
-    Type: AWS::SageMaker::App
-    Properties: 
-      AppName: "default"
-      AppType: "JupyterServer"
-      DomainId: !Ref SageMakerDomain
-      UserProfileName: !Select [0, !Split ["|", !Ref StudioUser4]]
-
-  KernelGateway4:
-    Type: AWS::SageMaker::App
-    Properties: 
-      AppName: "user-4-kernel"
-      AppType: "KernelGateway"
-      DomainId: !Ref SageMakerDomain
-      ResourceSpec:
-        InstanceType: !Ref InstanceType
-        SageMakerImageArn: !Ref KernelImageArn
-      UserProfileName: !Select [0, !Split ["|", !Ref StudioUser4]]
-
-  JupyterServer5:
-    Type: AWS::SageMaker::App
-    Properties: 
-      AppName: "default"
-      AppType: "JupyterServer"
-      DomainId: !Ref SageMakerDomain
-      UserProfileName: !Select [0, !Split ["|", !Ref StudioUser5]]
-
-  KernelGateway5:
-    Type: AWS::SageMaker::App
-    Properties: 
-      AppName: "user-5-kernel"
-      AppType: "KernelGateway"
-      DomainId: !Ref SageMakerDomain
-      ResourceSpec:
-        InstanceType: !Ref InstanceType
-        SageMakerImageArn: !Ref KernelImageArn
-      UserProfileName: !Select [0, !Split ["|", !Ref StudioUser5]]
 
 Outputs:
 
